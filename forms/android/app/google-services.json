@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1073603735500",
+    "project_id": "daliy-dairy",
+    "storage_bucket": "daliy-dairy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073603735500:android:f029a49a4f7e0059a6b769",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073603735500-1m7modhq422lkevh5hiq4em2ie4an9ps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvdUAxrQGBDKchc5taSHqtTWfUmvYSdPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073603735500-1m7modhq422lkevh5hiq4em2ie4an9ps.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
