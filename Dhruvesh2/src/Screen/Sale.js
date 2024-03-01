@@ -81,7 +81,6 @@ function Sale() {
                     </Text>
                 </View>
             </View>
-            {/* Date Picker */}
 
             {showDatePicker && (
                 <DateTimePicker
