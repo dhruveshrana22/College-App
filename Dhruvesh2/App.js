@@ -8,6 +8,9 @@ import 'react-native-gesture-handler';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import StackNavigation from './src/Screen/DrawerNavigator/CombinedNavigator';
 import IntroductionScreen from './src/Componant/IntroductionScreen/IntroductionScreen1';
+import { persistor, store } from './src/redux/Store/Store';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,7 +42,9 @@ function App() {
     }
 
     return (
-        <NavigationContainer>
+        <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+      <NavigationContainer>
             {/* <IntroductionScreen navigation={null} /> // Pass navigation={null} to prevent navigation in IntroductionScreen */}
             {isFirstLaunch ? (
                 <IntroductionScreen navigation={null} /> // Pass navigation={null} to prevent navigation in IntroductionScreen
@@ -47,6 +52,8 @@ function App() {
                 <StackNavigation />
             )}
         </NavigationContainer>
+      </PersistGate>
+    </Provider>
     );
 }
 
