@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // You may need to install this library for the share icon
 
-function MyComponent() {
+function MyComponent({ onSave }) {
     const handleSaveNew = () => {
         // Add logic for Save & New
         console.log('Save & New pressed');
@@ -10,6 +10,7 @@ function MyComponent() {
 
     const handleSave = () => {
         // Add logic for Save
+        onSave();
         console.log('Save pressed');
     };
 

@@ -1,9 +1,12 @@
 // rootReducer.js
 import { combineReducers } from 'redux';
-import businessProfileReducer from '../Busnessdetailstore/BussinessAction';
+import itemReducer from '../itemaction';
+import saleItemReducer from '../itemaction';
+import saleReducer from '../sale';
 
 const rootReducer = combineReducers({
-  businessProfile: businessProfileReducer,
+  saleItems: saleItemReducer,
+  sale:saleReducer,
 });
 
 export default rootReducer;

@@ -9,6 +9,9 @@ import { Modal, TextInput, Button } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Salecontent from '../Componant/IntroductionScreen/SaleInputcontent';
 import Save_ShareButtoncomponant from '../Componant/IntroductionScreen/Save&NewButton';
+import MyComponent from '../Componant/IntroductionScreen/Save&NewButton';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../redux/SaleItemaction';
 
 function Sale() {
     const [modalVisible, setModalVisible] = useState(false);
@@ -16,11 +19,10 @@ function Sale() {
     const [invoicePrefix, setInvoicePrefix] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize with the current date
     const [showDatePicker, setShowDatePicker] = useState(false);
-
-    const handleSave = () => {
-        // Add logic to save the data or perform other actions
-        setModalVisible(false);
-    };
+    const [savedInvoiceNo, setSavedInvoiceNo] = useState('');
+    const dispatch = useDispatch();
+    
+    
 
     const handleDatePress = () => {
         setShowDatePicker(true);
@@ -32,6 +34,28 @@ function Sale() {
             setSelectedDate(date);
         }
     };
+    const handleInvoicePress = () => {
+        // Set the modalVisible state to true
+        setModalVisible(true);
+    
+        // Generate or fetch the invoice number and update savedInvoiceNo
+         // Replace this with your logic to get the invoice number
+        setSavedInvoiceNo();
+    };
+   let invoiceCounter = 0;
+
+const generateOrFetchInvoiceNumber = () => {
+    // Increment the counter
+    invoiceCounter += 1;
+
+    // Format the invoice number as needed
+    const formattedInvoiceNumber = `INV-${invoiceCounter}`;
+
+    return formattedInvoiceNumber;
+};
+
+      
+    
 
     return (
         <View style={{ flex: 1, backgroundColor: '#E4F2FF' }}>
@@ -46,17 +70,17 @@ function Sale() {
                     backgroundColor: 'white',
                 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => setModalVisible(true)}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>
-                            Invoice No.
+                <TouchableOpacity onPress={handleInvoicePress}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>
+                        Invoice No.
+                    </Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 20, marginRight: 10, color: 'black' }}>
+                            {savedInvoiceNo}
                         </Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 20, marginRight: 10, color: 'black' }}>
-                                2
-                            </Text>
-                            <Text style={{ fontSize: 20, color: 'black' }}>v</Text>
-                        </View>
-                    </TouchableOpacity>
+                        <Text style={{ fontSize: 20, color: 'black' }}>v</Text>
+                    </View>
+                </TouchableOpacity>
                 </View>
                 <Text style={{ fontSize: 30 }}>|</Text>
                 <View style={{ flexDirection: 'column' }}>
@@ -96,7 +120,12 @@ function Sale() {
             )}
             {/* Main Content */}
             <View style={{ flex: 1, padding: 25, }}>
-                <Salecontent />
+            <Salecontent
+            invoicePrefix={invoicePrefix}
+        invoiceNo={invoiceNo}
+        selectedDate={selectedDate}
+        savedInvoiceNo={savedInvoiceNo}
+    />
             </View>
 
             {/* Modal */}
@@ -111,18 +140,23 @@ function Sale() {
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Invoice No.</Text>
+                        <Text style={{ fontSize: 20, marginLeft: 5, color: 'black' }}>
+                            {invoicePrefix}
+                            {invoiceNo}
+                        </Text>
                     </View>
 
                     <TextInput
                         label="Invoice Prefix"
-                        value={invoiceNo}
-                        onChangeText={text => setInvoiceNo(text)}
+                        value={invoicePrefix}
+                        onChangeText={text => setInvoicePrefix(text)}
                         style={{ marginVertical: 10 }}
                     />
+                    
 
                     <Button
                         mode="contained"
-                        onPress={handleSave}
+                        // onPress={handleSave}
                         style={{ backgroundColor: 'blue', color: 'white' }}>
                         Save
                     </Button>
@@ -131,7 +165,6 @@ function Sale() {
 
 
 
-            <Save_ShareButtoncomponant />
 
         </View>
     );

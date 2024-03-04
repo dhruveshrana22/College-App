@@ -8,6 +8,7 @@ import Business_Profile from '../Business_Profile/BusinessProfile';
 import CustomDrawerContent from './CustomDrawerContent';
 import HomeScreen from '../HomeScreen';
 import item from '../item';
+import Item from '../item';
 
 
 const Stack = createStackNavigator();
@@ -42,7 +43,7 @@ const StackNavigation = () => {
             />
             <Stack.Screen
                 name="Add Items to Sale"
-                component={item}
+                component={Item}
             />
             <Stack.Screen
                 name="Business_Profile"

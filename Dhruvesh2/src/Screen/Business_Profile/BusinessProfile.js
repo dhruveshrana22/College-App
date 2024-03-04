@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     TextInput,
@@ -9,7 +9,7 @@ import {
     ScrollView,
 } from 'react-native';
 import BusinessDetail from './BusinessDetail';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const CustomTextInput = ({ placeholder, value, onChangeText, title, isActive }) => {
     return (
         <View style={{ position: 'relative' }}>
@@ -74,11 +74,34 @@ const Business_Profile = () => {
     const handleBusinessInputChange = (field, value) => {
         setBusinessDetails({ ...businessDetails, [field]: value });
     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Retrieve data from AsyncStorage
+                const savedBasicDetails = await AsyncStorage.getItem('basicDetails');
+                const savedBusinessDetails = await AsyncStorage.getItem('businessDetails');
 
-    const handleSave = () => {
+                if (savedBasicDetails) {
+                    // Parse the JSON string back to an object
+                    const parsedBasicDetails = JSON.parse(savedBasicDetails);
+                    setBasicDetails(parsedBasicDetails);
+                }
+
+                if (savedBusinessDetails) {
+                    const parsedBusinessDetails = JSON.parse(savedBusinessDetails);
+                    setBusinessDetails(parsedBusinessDetails);
+                }
+            } catch (error) {
+                console.error('Error retrieving data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);  
+    const handleSave = async () => {
         // Add validation logic for new fields
         const requiredFields = ['signature', 'businessName', 'GSTIN', 'email', 'businessAddress', 'description', 'pincode'];
-
+    
         for (const field of requiredFields) {
             if (basicDetails[field] === '') {
                 setErrors({ ...errors, [field]: `${field} is required` });
@@ -87,10 +110,22 @@ const Business_Profile = () => {
                 setErrors({ ...errors, [field]: '' });
             }
         }
-
+    
         // Save logic
-        console.log('Saved successfully');
+        try {
+            // Save basicDetails and businessDetails to AsyncStorage
+            await AsyncStorage.setItem('basicDetails', JSON.stringify(basicDetails));
+            await AsyncStorage.setItem('businessDetails', JSON.stringify(businessDetails));
+    
+            console.log('Saved successfully');
+            
+            // Navigate back
+            navigation.goBack();
+        } catch (error) {
+            console.error('Error saving data:', error);
+        }
     };
+    
 
     return (
         <KeyboardAvoidingView
@@ -138,13 +173,13 @@ const Business_Profile = () => {
                         {currentTab === 'Basic Detail' && (
                             <View style={{ padding: 20 }}>
 
-                                <CustomTextInput
+                            <CustomTextInput
                                     title="Business Name"
-                                    isActive={activeInput === 'businessName'} // Check if this input is active
+                                    isActive={activeInput === 'businessName'}
                                     value={basicDetails.businessName}
                                     onChangeText={(text) => handleInputChange('businessName', text)}
-                                    onFocus={() => setActiveInput('businessName')} // Set active input on focus
-                                    onBlur={() => setActiveInput(null)} // Remove active input on blur
+                                    onFocus={() => setActiveInput('businessName')}
+                                    onBlur={() => setActiveInput(null)}
                                 />
                                 {/* <ErrorText error={errors.businessName} /> */}
 

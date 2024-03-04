@@ -1,8 +1,12 @@
+// Import the necessary dependencies
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { Button, Menu, Divider, Provider, TextInput, } from 'react-native-paper';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Button, Menu, Divider, Provider, TextInput } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { addSaleItem } from '../redux/itemaction';
+import { useNavigation } from '@react-navigation/native';
 
-function item() {
+function Item() {
     const [itemName, setItemName] = useState('');
     const [quantity, setQuantity] = useState('');
     const [unit, setUnit] = useState('');
@@ -10,8 +14,11 @@ function item() {
     const [taxType, setTaxType] = useState('');
     const [isUnitMenuVisible, setUnitMenuVisible] = useState(false);
     const [isTaxMenuVisible, setTaxMenuVisible] = useState(false);
-
     const [discount, setDiscount] = useState('');
+
+    // Use the useNavigation hook to get the navigation object
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     const calculateSubtotal = () => {
         // Ensure rate and quantity are valid numbers
@@ -54,23 +61,24 @@ function item() {
         setTaxType(selectedTax);
         setTaxMenuVisible(false);
     };
+
     const handleSave = () => {
-        // Add validation logic for new fields
-        // const requiredFields = ['signature', 'businessName', 'GSTIN', 'email', 'businessAddress', 'description', 'pincode'];
-
-        // for (const field of requiredFields) {
-        //     if (basicDetails[field] === '') {
-        //         setErrors({ ...errors, [field]: `${field} is required` });
-        //         return;
-        //     } else {
-        //         setErrors({ ...errors, [field]: '' });
-        //     }
-        // }
-
-        // Save logic
+        const saleData = {
+          itemName,
+          quantity,
+          unit,
+          rate,
+          taxType,
+          discount,
+          totalAmount: calculateTotalAmount(),
+        };
+    
+        // Dispatch the action to add the sale item to the Redux store
+        dispatch(addSaleItem(saleData));
+    
         console.log('Saved successfully');
+        navigation.goBack(); // Remove this if you want to stay on the same screen after saving
     };
-
     return (
         <Provider>
             <KeyboardAvoidingView
@@ -105,7 +113,6 @@ function item() {
                                     <TouchableOpacity onPress={handleUnitMenuOpen}>
                                         <View
                                             style={{
-
                                                 width: '50%',
                                                 padding: 10,
                                                 borderRadius: 5,
@@ -117,7 +124,7 @@ function item() {
                                         </View>
                                     </TouchableOpacity>
                                 }
-                                style={{ marginTop: 40 }} // Adjust the marginTop to control the position of the Menu
+                                style={{ marginTop: 40 }}
                             >
                                 <Menu.Item onPress={() => handleUnitSelect('Unit 1')} title="Unit 1" />
                                 <Menu.Item onPress={() => handleUnitSelect('Unit 2')} title="Unit 2" />
@@ -135,11 +142,7 @@ function item() {
                             onFocus={() => console.log('Rate Input Focused')}
                             style={{ flex: 1, marginRight: 10 }}
                         />
-
-
-
                     </View>
-
 
                     <ScrollView>
                         <View style={{ flex: 1, backgroundColor: '#E4F2FF', gap: 50, padding: 30 }}>
@@ -172,9 +175,6 @@ function item() {
                         </View>
                     </ScrollView>
 
-                    {/* Your Additional Content Goes Here */}
-                    {/* ... */}
-
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             onPress={() => console.log('Cancelled')}
@@ -200,11 +200,9 @@ function item() {
     );
 }
 
-
 const styles = StyleSheet.create({
     buttonContainer: {
         position: 'relative',
-
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
@@ -221,4 +219,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default item;
+export default Item;
