@@ -9,6 +9,8 @@ import CustomDrawerContent from './CustomDrawerContent';
 import HomeScreen from '../HomeScreen';
 import item from '../item';
 import Item from '../item';
+import ProductList from '../ProductAdd/ProductAdd';
+import ProductDetail from '../ProductAdd/ProductDetail';
 
 
 const Stack = createStackNavigator();
@@ -22,6 +24,8 @@ const CombinedNavigator = () => {
 
         >
             <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+            <Drawer.Screen name="ProducAdd" component={ProductList} />
+            <Drawer.Screen name="ProductDetail" component={ProductDetail} />
         </Drawer.Navigator>
     );
 };
