@@ -11,6 +11,7 @@ import item from '../item';
 import Item from '../item';
 import ProductList from '../ProductAdd/ProductAdd';
 import ProductDetail from '../ProductAdd/ProductDetail';
+import { SaleProvider } from '../Sale/SaleContext';
 
 
 const Stack = createStackNavigator();
@@ -31,7 +32,7 @@ const CombinedNavigator = () => {
 };
 
 const StackNavigation = () => {
-    return (
+    return (<SaleProvider>
         <Stack.Navigator
             screenOptions={{
                 ...TransitionPresets.SlideFromRightIOS,
@@ -41,10 +42,14 @@ const StackNavigation = () => {
                 component={CombinedNavigator}
                 options={{ headerShown: false }}
             />
+
+
+
             <Stack.Screen
                 name="Sale"
                 component={Sale}
             />
+
             <Stack.Screen
                 name="Add Items to Sale"
                 component={Item}
@@ -54,6 +59,7 @@ const StackNavigation = () => {
                 component={Business_Profile}
             />
         </Stack.Navigator>
+    </SaleProvider>
     );
 };
 

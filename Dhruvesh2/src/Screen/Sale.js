@@ -21,8 +21,8 @@ function Sale() {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [savedInvoiceNo, setSavedInvoiceNo] = useState('');
     const dispatch = useDispatch();
-    
-    
+
+
 
     const handleDatePress = () => {
         setShowDatePicker(true);
@@ -37,25 +37,25 @@ function Sale() {
     const handleInvoicePress = () => {
         // Set the modalVisible state to true
         setModalVisible(true);
-    
+
         // Generate or fetch the invoice number and update savedInvoiceNo
-         // Replace this with your logic to get the invoice number
+        // Replace this with your logic to get the invoice number
         setSavedInvoiceNo();
     };
-   let invoiceCounter = 0;
+    let invoiceCounter = 0;
 
-const generateOrFetchInvoiceNumber = () => {
-    // Increment the counter
-    invoiceCounter += 1;
+    const generateOrFetchInvoiceNumber = () => {
+        // Increment the counter
+        invoiceCounter += 1;
 
-    // Format the invoice number as needed
-    const formattedInvoiceNumber = `INV-${invoiceCounter}`;
+        // Format the invoice number as needed
+        const formattedInvoiceNumber = `INV-${invoiceCounter}`;
 
-    return formattedInvoiceNumber;
-};
+        return formattedInvoiceNumber;
+    };
 
-      
-    
+
+
 
     return (
         <View style={{ flex: 1, backgroundColor: '#E4F2FF' }}>
@@ -70,17 +70,17 @@ const generateOrFetchInvoiceNumber = () => {
                     backgroundColor: 'white',
                 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={handleInvoicePress}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>
-                        Invoice No.
-                    </Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 20, marginRight: 10, color: 'black' }}>
-                            {savedInvoiceNo}
+                    <TouchableOpacity onPress={handleInvoicePress}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 18, color: 'black' }}>
+                            Invoice No.
                         </Text>
-                        <Text style={{ fontSize: 20, color: 'black' }}>v</Text>
-                    </View>
-                </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 20, marginRight: 10, color: 'black' }}>
+                                {savedInvoiceNo}
+                            </Text>
+                            <Text style={{ fontSize: 20, color: 'black' }}>v</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <Text style={{ fontSize: 30 }}>|</Text>
                 <View style={{ flexDirection: 'column' }}>
@@ -120,12 +120,12 @@ const generateOrFetchInvoiceNumber = () => {
             )}
             {/* Main Content */}
             <View style={{ flex: 1, padding: 25, }}>
-            <Salecontent
-            invoicePrefix={invoicePrefix}
-        invoiceNo={invoiceNo}
-        selectedDate={selectedDate}
-        savedInvoiceNo={savedInvoiceNo}
-    />
+                <Salecontent
+                    invoicePrefix={invoicePrefix}
+                    invoiceNo={invoiceNo}
+                    selectedDate={selectedDate}
+                    savedInvoiceNo={savedInvoiceNo}
+                />
             </View>
 
             {/* Modal */}
@@ -152,7 +152,7 @@ const generateOrFetchInvoiceNumber = () => {
                         onChangeText={text => setInvoicePrefix(text)}
                         style={{ marginVertical: 10 }}
                     />
-                    
+
 
                     <Button
                         mode="contained"

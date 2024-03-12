@@ -1,13 +1,14 @@
 // rootReducer.js
 import { combineReducers } from 'redux';
-import itemReducer from '../itemaction';
-import saleItemReducer from '../itemaction';
-import saleReducer from '../sale';
+
+
 import productReducer from '../Productreducer';
+import saleReducer from '../sale';
+import itemReducer from '../itemaction';
 
 const rootReducer = combineReducers({
-  saleItems: saleItemReducer,
-  sale:saleReducer,
+  sale: saleReducer,
+  item: itemReducer,
   products:productReducer,
 });
 

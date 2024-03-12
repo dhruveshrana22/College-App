@@ -5,6 +5,7 @@ import { Button, Menu, Divider, Provider, TextInput } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { addSaleItem } from '../redux/itemaction';
 import { useNavigation } from '@react-navigation/native';
+import { useSaleContext } from './Sale/SaleContext';
 
 function Item() {
     const [itemName, setItemName] = useState('');
@@ -15,7 +16,7 @@ function Item() {
     const [isUnitMenuVisible, setUnitMenuVisible] = useState(false);
     const [isTaxMenuVisible, setTaxMenuVisible] = useState(false);
     const [discount, setDiscount] = useState('');
-
+    const { addSaleData } = useSaleContext();
     // Use the useNavigation hook to get the navigation object
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -37,7 +38,7 @@ function Item() {
         const quantityValue = parseFloat(quantity) || 0;
         const discountValue = parseFloat(discount) || 0;
 
-        // Calculate Subtotal
+        // Calculate Subtotal   
         const subtotal = rateValue * quantityValue;
 
         // Calculate the discount amount based on the percentage
@@ -64,20 +65,18 @@ function Item() {
 
     const handleSave = () => {
         const saleData = {
-          itemName,
-          quantity,
-          unit,
-          rate,
-          taxType,
-          discount,
-          totalAmount: calculateTotalAmount(),
+            itemName,
+            quantity,
+            unit,
+            rate,
+            taxType,
+            discount,
+            totalAmount: calculateTotalAmount(),
         };
-    
-        // Dispatch the action to add the sale item to the Redux store
-        dispatch(addSaleItem(saleData));
-    
+
+        addSaleData(saleData);
         console.log('Saved successfully');
-        navigation.goBack(); // Remove this if you want to stay on the same screen after saving
+        navigation.goBack();
     };
     return (
         <Provider>

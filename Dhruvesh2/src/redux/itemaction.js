@@ -1,42 +1,59 @@
-// SaleItemActions.js
+// itemReducer.js
 
-export const ADD_SALE_ITEM = 'ADD_SALE_ITEM';
-export const CLEAR_SALE_ITEMS = 'CLEAR_SALE_ITEMS';
+// Action Types
+export const ADD_ITEM = 'ADD_ITEM';
+export const UPDATE_ITEM = 'UPDATE_ITEM';
+export const DELETE_ITEM = 'DELETE_ITEM';
 
-export const addSaleItem = (saleData) => ({
-  type: ADD_SALE_ITEM,
-  payload: saleData,
+// Action Creators
+export const addItem = (item) => ({
+  type: ADD_ITEM,
+  payload: item,
 });
 
-export const clearSaleItems = () => ({
-  type: CLEAR_SALE_ITEMS,
+export const updateItem = (index, updatedItem) => ({
+  type: UPDATE_ITEM,
+  payload: { index, updatedItem },
 });
 
+export const deleteItem = (index) => ({
+  type: DELETE_ITEM,
+  payload: index,
+});
 
-// SaleItemReducer.js
-
-
+// Initial State
 const initialState = {
-  saleItems: [],
+  items: [],
 };
 
-const saleItemReducer = (state = initialState, action) => {
-    console.log("Saleitem",action.payload)
-
+// Reducer
+const itemReducer = (state = initialState, action) => {
+  console.log("itemReducer", action.payload)
   switch (action.type) {
-    case ADD_SALE_ITEM:
+    case ADD_ITEM:
       return {
         ...state,
-        saleItems: [...state.saleItems, action.payload],
+        items: [...state.items, action.payload],
       };
-    case CLEAR_SALE_ITEMS:
+
+    case UPDATE_ITEM:
+      const updatedItems = [...state.items];
+      updatedItems[action.payload.index] = action.payload.updatedItem;
       return {
         ...state,
-        saleItems: [],
+        items: updatedItems,
       };
+
+    case DELETE_ITEM:
+      const filteredItems = state.items.filter((_, index) => index !== action.payload);
+      return {
+        ...state,
+        items: filteredItems,
+      };
+
     default:
       return state;
   }
 };
 
-export default saleItemReducer;
+export default itemReducer;

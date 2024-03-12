@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { FlatList, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { TextInput, Button, Text } from 'react-native-paper';
 import MyComponent from './Save&NewButton';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSaleContext } from '../../Screen/Sale/SaleContext';
 
 function Salecontent({ invoiceNo, selectedDate, savedInvoiceNo, invoicePrefix }) {
     const [customer, setCustomer] = useState('');
@@ -13,9 +14,9 @@ function Salecontent({ invoiceNo, selectedDate, savedInvoiceNo, invoicePrefix })
     const [items, setItems] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const dispatch = useDispatch();
-   
-  const saleItems = useSelector((state) => state.saleItems.saleItems);
-  console.log("dc", saleItems);
+    const { saleDataList, clearSaleDataList, deleteSaleData } = useSaleContext();
+    //   const saleItems = useSelector((state) => state.saleItems.saleItems);
+    //   console.log("dc", saleItems);
     const handleAddItems = () => {
         navigation.navigate("Add Items to Sale");
     };
@@ -30,19 +31,58 @@ function Salecontent({ invoiceNo, selectedDate, savedInvoiceNo, invoicePrefix })
         setItems([]);
         setTotalAmount(0);
 
+        // Clear saleDataList
+        clearSaleDataList();
         // Navigate after saving
         navigation.goBack();
     };
 
-    const renderItem = ({ item, index }) => (
-        <View key={index} style={{ padding: 10, backgroundColor: 'white', marginVertical: 5 }}>
-          {/* Display item details, customize this according to your structure */}
-          <Text>{item.itemName}</Text>
-          <Text>Quantity: {item.quantity}</Text>
-          <Text>Total: {item.totalAmount}</Text>
-          {/* Add more details as needed */}
-        </View>
-      );
+
+    console.log("saleDataList", saleDataList)
+    // Define the data to display in FlatList
+    const data = saleDataList ? saleDataList : [];
+
+
+
+    useEffect(() => {
+        setItems(saleDataList || []);
+    }, [saleDataList]);
+
+
+    const handleDelete = (item) => {
+        // Implement your delete logic here
+        deleteSaleData(item);
+    };
+    const renderItem = ({ item }) => (
+        <TouchableOpacity >
+            <View style={styles.cardContainer}>
+                <View style={styles.cardContent}>
+                    <Text style={styles.itemName}>{item.itemName}:</Text>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.infoText}>Quantity: {item.quantity}</Text>
+                        <Text style={styles.infoText}>Unit: {item.unit}</Text>
+                    </View>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.infoText}>Rate: {item.rate}</Text>
+                        <Text style={styles.infoText}>Tax Type: {item.taxType}</Text>
+                    </View>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.infoText}>Discount: {item.discount}</Text>
+                    </View>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.TotalinfoText}>Total Amount: {item.totalAmount}</Text>
+                    </View>
+                </View>
+                <View style={styles.deleteButtonContainer}>
+                <TouchableOpacity onPress={() => handleDelete(item)} style={styles.deleteButtonContainer}>
+      <Text style={styles.deleteButtonText}>Delete</Text>
+    </TouchableOpacity>
+                </View>
+            </View>
+        </TouchableOpacity>
+
+    );
+
 
     const calculateTotalAmount = () => {
         // Calculate total amount based on the rates of the items
@@ -86,11 +126,14 @@ function Salecontent({ invoiceNo, selectedDate, savedInvoiceNo, invoicePrefix })
 
                 {/* Total Amount Row */}
             </View>
-            <FlatList
-        data={saleItems}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-      />
+            {saleDataList && (
+                <FlatList
+                    data={data}
+                    keyExtractor={(item) => item.uniqueIdentifier}
+                    renderItem={renderItem}
+                />
+
+            )}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 30, padding: 40 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 10 }}>Total Amount</Text>
                 <Text style={{ fontSize: 18 }}>Rs.{calculateTotalAmount()}</Text>
@@ -99,5 +142,60 @@ function Salecontent({ invoiceNo, selectedDate, savedInvoiceNo, invoicePrefix })
         </>
     );
 }
+
+const styles = StyleSheet.create({
+    cardContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        padding: 15,
+        marginVertical: 8,
+        elevation: 3, // for shadow on Android
+        shadowColor: '#000', // for shadow on iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+    },
+    itemNameContainer: {
+        flex: 1,
+    },
+    itemNameText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    itemDetailsContainer: {
+        flex: 3,
+    },
+    deleteButtonContainer: {
+        backgroundColor: 'red',
+        padding: 10,
+        borderRadius: 5,
+    },
+    deleteButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    itemName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    infoContainer: {
+        width: '80%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 5,
+    },
+    infoText: {
+        fontSize: 16,
+    },
+    TotalinfoText:{
+        fontSize: 20, 
+        fontWeight:'900',
+
+    }
+});
+
 
 export default Salecontent;
