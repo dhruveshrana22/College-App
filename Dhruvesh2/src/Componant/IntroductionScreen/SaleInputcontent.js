@@ -69,9 +69,9 @@ function Salecontent({ invoiceNo, selectedDate, savedInvoiceNo, invoicePrefix })
                     <View style={styles.infoContainer}>
                         <Text style={styles.infoText}>Discount: {item.discount}</Text>
                     </View>
-                    <View style={styles.infoContainer}>
+                    {/* <View style={styles.infoContainer}>
                         <Text style={styles.TotalinfoText}>Total Amount: {item.totalAmount}</Text>
-                    </View>
+                    </View> */}
                 </View>
                 <View style={styles.deleteButtonContainer}>
                 <TouchableOpacity onPress={() => handleDelete(item)} style={styles.deleteButtonContainer}>
